@@ -111,94 +111,54 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.7); /* 半透明背景 */
   z-index: 100;
   justify-content: center;
   align-items: center;
 ">
-  <div id="pdfBox">
-    <iframe id="pdfFrame" src="star.pdf"></iframe>
-    <button id="closePdf">×</button>
+  <div id="pdfBox" style="
+    width: 50%;
+    height: 50%;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    position: relative;
+  ">
+    <iframe src="star.pdf" style="
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
+    "></iframe>
+
+    <button id="closePdf" style="
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 12px;
+      cursor: pointer;
+      font-size: 14px;
+    ">×</button>
   </div>
 </div>
-
-<style>
-  /* ▼ PDFボックス全体のスタイル ▼ */
-  #pdfBox {
-    position: relative;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    overflow: hidden;
-    width: 80%;
-    height: 80%;
-    max-width: 800px;
-    max-height: 90vh;
-  }
-
-  /* ▼ iframe（PDF）部分 ▼ */
-  #pdfFrame {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-
-  /* 閉じるボタン */
-  #closePdf {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: #333;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 5px 12px;
-    cursor: pointer;
-    font-size: 16px;
-    z-index: 10;
-  }
-
-  /* ▼ スマホ対応 ▼ */
-  @media (max-width: 768px) {
-    #pdfBox {
-      width: 90%;
-      height: 70%;
-      border-radius: 8px;
-    }
-
-    #closePdf {
-      font-size: 14px;
-      padding: 4px 10px;
-      top: 6px;
-      right: 6px;
-    }
-  }
-</style>
 
 <script>
   const title = document.getElementById('title');
   const pdfContainer = document.getElementById('pdfContainer');
   const closePdf = document.getElementById('closePdf');
 
-  // タイトルをクリックしたらPDF表示
   title.addEventListener('click', () => {
     pdfContainer.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // 背景スクロールを止める
   });
 
-  // ×ボタンで閉じる
   closePdf.addEventListener('click', () => {
     pdfContainer.style.display = 'none';
-    document.body.style.overflow = ''; // スクロール再開
-  });
-
-  // スマホなどでPDFがうまく表示されない場合、埋め込み用URLを利用
-  const pdfFrame = document.getElementById('pdfFrame');
-  pdfFrame.addEventListener('error', () => {
-    pdfFrame.src = `https://docs.google.com/gview?url=${location.origin}/star.pdf&embedded=true`;
   });
 </script>
-
 
   <p class="description">
     石本唄・樋口綾によるユニット「ryota」<sup>＊1</sup>による、ポップアップ<sup>＊2</sup> -サイト。<br>
