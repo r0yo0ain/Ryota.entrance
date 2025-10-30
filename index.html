@@ -17,9 +17,9 @@
       font-size: 36px;
       margin-bottom: 20px;
       text-shadow: 0 0 8px rgba(0,0,0,0.5);
+      cursor: pointer;
     }
 
-    /* 本文エリア */
     .description {
       font-size: 16px;
       line-height: 1.9;
@@ -28,29 +28,26 @@
       text-align: left;
     }
 
-    /* 脚注の上付き文字 */
     sup {
       font-size: 0.7em;
       vertical-align: super;
     }
 
-    /* 脚注リスト */
     .footnotes {
       font-size: 13px;
       color: #555;
-      line-height: 2.2;   /* ← ここを1.8 → 2.2 に変更（行間を広げる） */
+      line-height: 2.2;
       max-width: 550px;
-      margin: 0 auto 100px; /* ← 下の余白も少し広げてボタンと離す */
+      margin: 0 auto 100px;
       text-align: left;
     }
 
-    /* モコモコ（白っぽい）ボタン */
     .buttons {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 40px; /* ← ボタンの間隔を広げる（30px → 40px） */
-      margin-top: 60px; /* ← 上の余白もやや広く */
+      gap: 40px;
+      margin-top: 60px;
     }
 
     button {
@@ -96,42 +93,33 @@
       height: 100%;
       z-index: -1;
     }
-  </style>
-</head>
-<body>
-  <canvas id="canvas"></canvas>
 
- <h1 id="title" style="cursor: pointer;">ryota</h1>
+    /* ▼ 画像を中央に拡大表示するモーダル ▼ */
+    #imageContainer {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
 
-<!-- PDFを重ねて表示するボックス -->
-<div id="pdfContainer" style="
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255,255,255,0.7); /* 半透明背景 */
-  z-index: 100;
-  justify-content: center;
-  align-items: center;
-">
-  <div id="pdfBox" style="
-    width: 50%;
-    height: 50%;
-    background: white;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    border-radius: 10px;
-    position: relative;
-  ">
-    <iframe src="star.pdf" style="
+    #imageBox {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    #imageBox img {
       width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: 10px;
-    "></iframe>
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
 
-    <button id="closePdf" style="
+    #closeImage {
       position: absolute;
       top: 10px;
       right: 10px;
@@ -142,23 +130,21 @@
       padding: 5px 12px;
       cursor: pointer;
       font-size: 14px;
-    ">×</button>
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <h1 id="title">ryota</h1>
+
+  <!-- 画像表示モーダル -->
+  <div id="imageContainer">
+    <div id="imageBox">
+      <img src="star.jpg" alt="star image">
+      <button id="closeImage">×</button>
+    </div>
   </div>
-</div>
-
-<script>
-  const title = document.getElementById('title');
-  const pdfContainer = document.getElementById('pdfContainer');
-  const closePdf = document.getElementById('closePdf');
-
-  title.addEventListener('click', () => {
-    pdfContainer.style.display = 'flex';
-  });
-
-  closePdf.addEventListener('click', () => {
-    pdfContainer.style.display = 'none';
-  });
-</script>
 
   <p class="description">
     石本唄・樋口綾によるユニット「ryota」<sup>＊1</sup>による、ポップアップ<sup>＊2</sup> -サイト。<br>
@@ -182,37 +168,49 @@
 
   <div id="countdown"></div>
 
-<script>
-  // カウントダウン設定
-  const countdownEl = document.getElementById('countdown');
-  const targetTime = new Date("2025-10-31T20:00:00").getTime();
-  const buttons = document.querySelectorAll('button');
+  <script>
+    const title = document.getElementById('title');
+    const imageContainer = document.getElementById('imageContainer');
+    const closeImage = document.getElementById('closeImage');
 
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const diff = targetTime - now;
+    title.addEventListener('click', () => {
+      imageContainer.style.display = 'flex';
+    });
 
-    if (diff <= 0) {
-      countdownEl.textContent = "終了しました";
-      // ボタンを無効化
-      buttons.forEach(btn => {
-        btn.disabled = true;
-        btn.style.backgroundColor = "#ccc";
-        btn.style.cursor = "not-allowed";
-      });
-      return;
+    closeImage.addEventListener('click', () => {
+      imageContainer.style.display = 'none';
+    });
+
+    // カウントダウン
+    const countdownEl = document.getElementById('countdown');
+    const targetTime = new Date("2025-10-31T20:00:00").getTime();
+    const buttons = document.querySelectorAll('button');
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const diff = targetTime - now;
+
+      if (diff <= 0) {
+        countdownEl.textContent = "終了しました";
+        buttons.forEach(btn => {
+          btn.disabled = true;
+          btn.style.backgroundColor = "#ccc";
+          btn.style.cursor = "not-allowed";
+        });
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      countdownEl.textContent = `残り ${days}日 ${hours}時間 ${minutes}分 ${seconds}秒`;
     }
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    setInterval(updateCountdown, 1000);
 
-    countdownEl.textContent = `残り ${days}日 ${hours}時間 ${minutes}分 ${seconds}秒`;
-  }
-
-  setInterval(updateCountdown, 1000);
-
+    // 背景アニメーション
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     let width, height;
