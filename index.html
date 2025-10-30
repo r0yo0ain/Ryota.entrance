@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ryota</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
+      text-align: center;
+      padding: 30px;
+      background-color: #e6f2ff; /* 薄い水色 */
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 36px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 8px rgba(0,0,0,0.5);
+    }
+
+    /* 本文エリア */
+    .description {
+      font-size: 16px;
+      line-height: 1.9;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      text-align: left;
+    }
+
+    /* 脚注の上付き文字 */
+    sup {
+      font-size: 0.7em;
+      vertical-align: super;
+    }
+
+    /* 脚注リスト */
+    .footnotes {
+      font-size: 13px;
+      color: #555;
+      line-height: 2.2;   /* ← ここを1.8 → 2.2 に変更（行間を広げる） */
+      max-width: 550px;
+      margin: 0 auto 100px; /* ← 下の余白も少し広げてボタンと離す */
+      text-align: left;
+    }
+
+    /* モコモコ（白っぽい）ボタン */
+    .buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px; /* ← ボタンの間隔を広げる（30px → 40px） */
+      margin-top: 60px; /* ← 上の余白もやや広く */
+    }
+
+    button {
+      font-size: 18px;
+      padding: 16px 36px;
+      border: none;
+      border-radius: 40px;
+      background: #f2f6ff;
+      box-shadow: 8px 8px 15px rgba(0,0,0,0.1),
+                  -8px -8px 15px rgba(255,255,255,0.9);
+      color: #333;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    button:hover {
+      background: #ffffff;
+      box-shadow: 6px 6px 12px rgba(0,0,0,0.15),
+                  -6px -6px 12px rgba(255,255,255,1);
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      background: #e9eef9;
+      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.15),
+                  inset -4px -4px 8px rgba(255,255,255,1);
+      transform: translateY(1px);
+    }
+
+    #countdown {
+      margin-top: 40px;
+      color: red;
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+ <h1 id="title" style="cursor: pointer;">ryota</h1>
+
+<!-- PDFを重ねて表示するボックス -->
+<div id="pdfContainer" style="
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.7); /* 半透明背景 */
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+">
+  <div id="pdfBox" style="
+    width: 50%;
+    height: 50%;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    position: relative;
+  ">
+    <iframe src="star.pdf" style="
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
+    "></iframe>
+
+    <button id="closePdf" style="
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 12px;
+      cursor: pointer;
+      font-size: 14px;
+    ">×</button>
+  </div>
+</div>
+
+<script>
+  const title = document.getElementById('title');
+  const pdfContainer = document.getElementById('pdfContainer');
+  const closePdf = document.getElementById('closePdf');
+
+  title.addEventListener('click', () => {
+    pdfContainer.style.display = 'flex';
+  });
+
+  closePdf.addEventListener('click', () => {
+    pdfContainer.style.display = 'none';
+  });
+</script>
+
+  <p class="description">
+    石本唄・樋口綾によるユニット「ryota」<sup>＊1</sup>による、ポップアップ<sup>＊2</sup> -サイト。<br>
+    2025/10/31の午前10時から午後8時<sup>＊3</sup>にかけての間だけアクセスできる。<br>
+    このサイトでは、伊勢丹 新宿店に赴いたわたしたちが客として体験し、持ち帰ったものを公開している。
+  </p>
+
+  <div class="footnotes">
+    ＊1　二人の名前、綾（りょう）と唄（うた）を繋げて読むと「りょうた」になることから決定したユニット名。<br>
+    ＊2　ポップアップ（pop-up）とは、飛び出す、（不意に）現れる、出現する　といった意味を持つ言葉である。<br>
+    　　　（参照：<a href="https://eow.alc.co.jp/search?q=pop-up#google_vignette" target="_blank">英辞郎 on the web</a>）<br>
+    ＊3　伊勢丹　新宿店の営業時間（レストランフロア除く）に準ずる。<br>
+    　　　（参照：<a href="https://www.mistore.jp/store/shinjuku/access.html" target="_blank">公式サイト</a>）
+  </div>
+
+  <div class="buttons">
+    <button onclick="window.open('https://ryota1031zips.netlify.app','_blank')">Click here</button>
+    <button onclick="window.open('https://ryota1031soundtrack.netlify.app','_blank')">Click here</button>
+    <button onclick="window.open('https://ryota1031drawing.netlify.app','_blank')">Click here</button>
+  </div>
+
+  <div id="countdown"></div>
+
+<script>
+  // カウントダウン設定
+  const countdownEl = document.getElementById('countdown');
+  const targetTime = new Date("2025-10-31T20:00:00").getTime();
+  const buttons = document.querySelectorAll('button');
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const diff = targetTime - now;
+
+    if (diff <= 0) {
+      countdownEl.textContent = "終了しました";
+      // ボタンを無効化
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.style.backgroundColor = "#ccc";
+        btn.style.cursor = "not-allowed";
+      });
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    countdownEl.textContent = `残り ${days}日 ${hours}時間 ${minutes}分 ${seconds}秒`;
+  }
+
+  setInterval(updateCountdown, 1000);
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const balls = [];
+    for (let i = 0; i < 8; i++) {
+      balls.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 3,
+        vy: (Math.random() - 0.5) * 3,
+        r: 20 + Math.random() * 15
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = "rgba(255,0,0,0.8)";
+      ctx.lineWidth = 2;
+
+      balls.forEach(ball => {
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+
+        if (ball.x - ball.r < 0 || ball.x + ball.r > width) ball.vx *= -1;
+        if (ball.y - ball.r < 0 || ball.y + ball.r > height) ball.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
