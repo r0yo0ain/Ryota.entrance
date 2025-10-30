@@ -103,7 +103,7 @@
 
  <h1 id="title" style="cursor: pointer;">ryota</h1>
 
-<!-- PDFまたは画像を表示するボックス -->
+<!-- PDFを重ねて表示するボックス -->
 <div id="pdfContainer" style="
   display: none;
   position: fixed;
@@ -111,40 +111,25 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.7); /* 半透明背景 */
   z-index: 100;
   justify-content: center;
   align-items: center;
 ">
   <div id="pdfBox" style="
-    width: 80%;
-    max-width: 600px;
-    height: 70%;
+    width: 50%;
+    height: 50%;
     background: white;
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     border-radius: 10px;
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   ">
-    <!-- PDF（PC用） -->
-    <iframe id="pdfFrame" src="star.pdf" style="
+    <iframe src="star.pdf" style="
       width: 100%;
       height: 100%;
       border: none;
       border-radius: 10px;
-      display: none; /* ← デフォルト非表示にして、PCのみ表示する */
     "></iframe>
-
-    <!-- 画像（スマホ用） -->
-    <img id="pdfImage" src="star.jpg" alt="star" style="
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      border-radius: 10px;
-      display: none; /* ← デフォルト非表示、スマホで表示 */
-    ">
 
     <button id="closePdf" style="
       position: absolute;
@@ -165,19 +150,9 @@
   const title = document.getElementById('title');
   const pdfContainer = document.getElementById('pdfContainer');
   const closePdf = document.getElementById('closePdf');
-  const pdfFrame = document.getElementById('pdfFrame');
-  const pdfImage = document.getElementById('pdfImage');
 
   title.addEventListener('click', () => {
     pdfContainer.style.display = 'flex';
-    // スマホかどうか判定してPDF/画像を切り替え
-    if (window.innerWidth < 768) {
-      pdfImage.style.display = 'block';
-      pdfFrame.style.display = 'none';
-    } else {
-      pdfFrame.style.display = 'block';
-      pdfImage.style.display = 'none';
-    }
   });
 
   closePdf.addEventListener('click', () => {
@@ -185,9 +160,8 @@
   });
 </script>
 
-
   <p class="description">
-    石本唄・樋口綾のユニット「ryota」<sup>＊1</sup>による、ポップアップ<sup>＊2</sup> -サイト。<br>
+    石本唄・樋口綾によるユニット「ryota」<sup>＊1</sup>による、ポップアップ<sup>＊2</sup> -サイト。<br>
     2025/10/31の午前10時から午後8時<sup>＊3</sup>にかけての間だけアクセスできる。<br>
     このサイトでは、伊勢丹 新宿店に赴いたわたしたちが客として体験し、持ち帰ったものを公開している。
   </p>
